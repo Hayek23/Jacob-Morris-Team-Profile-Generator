@@ -110,3 +110,12 @@ const writeFile = data => {
         }
     })
 };
+
+createManager()
+    .then(addEmployee)
+    .then((team) => {
+        return generateTeam(team);
+    })
+    .then((page) => {
+        return writeFile(page);
+    });
