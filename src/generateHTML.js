@@ -1,3 +1,7 @@
+const Employee = require('../lib/employee')
+const index = require('../index')
+
+
 function generateManager(managerInput){
     return `            <div class="col-sm">
     <h2 class="bg-warning">${managerInput.managerName}</h2>
@@ -12,7 +16,7 @@ function generateEngineer(employee){
     return `            <div class="col-sm">
     <h2 class="bg-success">${employee.name}</h2>
     <h3>${employee.role}</h3>
-    <h3>Employee ID: ${emloyee.id}</h3>
+    <h3>Employee ID: ${employee.id}</h3>
     <h3>Email: ${employee.email}</h3>
     <h3>GitHub: ${employee.github}</h3>
 </div>`
@@ -21,37 +25,45 @@ function generateIntern(employee){
     return `            <div class="col-sm">
     <h2 class="bg-success">${employee.name}</h2>
     <h3>${employee.role}</h3>
-    <h3>Employee ID: ${emloyee.id}</h3>
+    <h3>Employee ID: ${employee.id}</h3>
     <h3>Email: ${employee.email}</h3>
     <h3>School: ${employee.school}</h3>
 </div>`
 }
-function generateTeam(data){
+
+
+
+const generateTeam = (data => {
+    const Employee = require('../lib/employee.js')
+
     page = [];
 
     for (let i=0; i<data.length; i++){
-        const employee=data[i];
+        const employee = data[i];
         const role = employee.getRole();
 
-        const manager = generateManager(managerInput);
-        page.push(manager);
-
+        
         if (role === 'Intern'){
-            const intern = generateIntern(employee)
+            const intern = generateIntern(Employee)
             page.push(intern)
         } else if(role === 'Engineer'){
-            const engineer = generateEngineer(employee)
+            const engineer = generateEngineer(Employee)
             page.push(engineer)
-        }
+        }else if(role === 'Manager'){
+            const manager = generateManager(Employee);
+        page.push(manager);
+
+        };
     };
 
     const employees = page.join('');
     const createTeam = generateTeamProfile();
 
     return createTeam;
-};
+});
 
-function generateTeamProfile(){
+function generateTeamProfile(employees){
+
     return`<!doctype html>
     <html lang="en">
       <head>

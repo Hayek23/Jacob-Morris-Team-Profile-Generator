@@ -5,9 +5,6 @@ const Manager = require('./lib/manager');
 const Employee = require('./lib/employee');
 const Intern = require('./lib/intern');
 const Engineer = require('./lib/engineer');
-const { create } = require('domain');
-const { deepStrictEqual } = require('assert');
-
 const team = []
 
 const createManager = () =>{
@@ -79,14 +76,14 @@ const addEmployee = () => {
     ])
     .then(employeeInput => {
         var {name, email, id, role, school, github, addNewMember} = employeeInput
-        let employee;
+        let newEmployee;
         if(role === 'Engineer'){
-             employee = new Engineer(name, email, id, github);
+             newEmployee = new Engineer(name, email, id, github);
         } else if(role === 'Intern'){
-             employee = new Intern(name, email, id, school);
+             newEmployee = new Intern(name, email, id, school);
         };
-        team.push(employee)
-        console.log(employee)
+        team.push(newEmployee)
+        console.log(newEmployee)
         if(addNewMember){
             return addEmployee(team);
         }else{
@@ -95,8 +92,8 @@ const addEmployee = () => {
     });
 };
 
-function writeToFile(location, fileName, data) {
-    fs.writeFile(location, fileName, data, err => {
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, err => {
         if (err){
             return console.log(err)
         } else{
@@ -105,17 +102,22 @@ function writeToFile(location, fileName, data) {
     })
 }
 
+const data = JSON.stringify(team)
 
 async function init(){
-    const managerInput = await createManager();
+    const managerInput = await createManager()
     const {managerName, managerId, managerEmail, managerOfficeNumber} = managerInput;
-    const manager = new Manager(managerName, managerId, managerEmail, managerOfficeNumber);
+    const manager = new Manager(managerName, managerId, managerEmail, managerOfficeNumber)
 
     const employeeInput = await addEmployee();
-    team.push(manager);
-    console.log(manager);
-    const page = generateTeam(team);
-    writeToFile(page);
+    
+    team.push(manager)
+    
+    console.log(manager)
+    const page = generateTeam(team)
+    writeToFile(page)
 };
 
 init();
+
+module.exports=data
