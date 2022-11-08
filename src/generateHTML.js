@@ -73,3 +73,5 @@ function generateTeamProfile(){
       </body>
     </html>`
 }
+
+module.exports=generateTeam

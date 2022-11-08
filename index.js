@@ -1,4 +1,4 @@
-const generateHTML = require('./src/generateHTML');
+const generateTeam = require('./src/generateHTML');
 const fs = require('fs')
 const inquirer = require('inquirer')
 const Manager = require('./lib/manager');
@@ -6,11 +6,12 @@ const Employee = require('./lib/employee');
 const Intern = require('./lib/intern');
 const Engineer = require('./lib/engineer');
 const { create } = require('domain');
+const { deepStrictEqual } = require('assert');
 
 const team = []
 
 const createManager = () =>{
-    inquirer.prompt([
+   return inquirer.prompt([
         {
             type:'input',
             message:'What is the name of your team manager?',
@@ -31,18 +32,11 @@ const createManager = () =>{
             message:'What is the office number of your manager?',
             name:'managerOfficeNumber',
         },
-    ])
-    .then(managerInput => {
-        const {managerName, managerId, managerEmail, managerOfficeNumber} = managerInput;
-        const manager = new Manager(managerName, managerId, managerEmail, managerOfficeNumber)
-
-        team.push(manager)
-        console.log(manager)
-    })
+    ]);
 }
 
 const addEmployee = () => {
-    inquirer.prompt([
+   return inquirer.prompt([
         {
             type:'input',
             message:'What is the name of this employee?',
@@ -101,21 +95,27 @@ const addEmployee = () => {
     });
 };
 
-const writeFile = data => {
-    fs.writeFile('./dist/index.html', data, err => {
-        if(err) {
-            return console.log(err);
+function writeToFile(location, fileName, data) {
+    fs.writeFile(location, fileName, data, err => {
+        if (err){
+            return console.log(err)
         } else{
-            console.log('File Made!');
+            console.log('File created!')
         }
     })
+}
+
+
+async function init(){
+    const managerInput = await createManager();
+    const {managerName, managerId, managerEmail, managerOfficeNumber} = managerInput;
+    const manager = new Manager(managerName, managerId, managerEmail, managerOfficeNumber);
+
+    const employeeInput = await addEmployee();
+    team.push(manager);
+    console.log(manager);
+    const page = generateTeam(team);
+    writeToFile(page);
 };
 
-createManager()
-    .then(addEmployee)
-    .then((team) => {
-        return generateTeam(team);
-    })
-    .then((page) => {
-        return writeFile(page);
-    });
+init();
