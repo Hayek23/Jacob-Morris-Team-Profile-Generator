@@ -76,14 +76,14 @@ const addEmployee = () => {
     ])
     .then(employeeInput => {
         var {name, email, id, role, school, github, addNewMember} = employeeInput
-        let newEmployee;
+        let employee;
         if(role === 'Engineer'){
-             newEmployee = new Engineer(name, email, id, github);
+             employee = new Engineer(name, email, id, github);
         } else if(role === 'Intern'){
-             newEmployee = new Intern(name, email, id, school);
+             employee = new Intern(name, email, id, school);
         };
-        team.push(newEmployee)
-        console.log(newEmployee)
+        team.push(employee)
+        console.log(employee)
         if(addNewMember){
             return addEmployee(team);
         }else{
@@ -115,7 +115,7 @@ async function init(){
     
     console.log(manager)
     const page = generateTeam(team)
-    writeToFile(page)
+    writeToFile('./dist/index.html', page)
 };
 
 init();

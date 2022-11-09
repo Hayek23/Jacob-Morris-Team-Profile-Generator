@@ -2,13 +2,13 @@ const Employee = require('../lib/employee')
 const index = require('../index')
 
 
-function generateManager(managerInput){
+function generateManager(manager){
     return `            <div class="col-sm">
-    <h2 class="bg-warning">${managerInput.managerName}</h2>
+    <h2 class="bg-warning">${manager.name}</h2>
     <h3>Manager</h3>
-    <h3>Employee ID: ${managerInput.managerId}</h3>
-    <h3>Email: ${managerInput.managerEmail}</h3>
-    <h3>Office Number: ${managerInput.managerOfficeNumber}</h3>
+    <h3>Employee ID: ${manager.id}</h3>
+    <h3>Email: ${manager.email}</h3>
+    <h3>Office Number: ${manager.officeNumber}</h3>
 </div>`
 }
 
@@ -33,34 +33,34 @@ function generateIntern(employee){
 
 
 
-const generateTeam = (data => {
-    const Employee = require('../lib/employee.js')
+const generateTeam = (data) => {
 
     page = [];
 
     for (let i=0; i<data.length; i++){
-        const employee = data[i];
-        const role = employee.getRole();
+        const role = data[i].getRole();
 
         
         if (role === 'Intern'){
-            const intern = generateIntern(Employee)
+            const intern = generateIntern(data[i])
             page.push(intern)
         } else if(role === 'Engineer'){
-            const engineer = generateEngineer(Employee)
+            const engineer = generateEngineer(data[i])
             page.push(engineer)
         }else if(role === 'Manager'){
-            const manager = generateManager(Employee);
+            const manager = generateManager(data[i]);
         page.push(manager);
 
         };
     };
 
     const employees = page.join('');
-    const createTeam = generateTeamProfile();
+    const createTeam = generateTeamProfile(employees);
+
+    console.log(createTeam)
 
     return createTeam;
-});
+};
 
 function generateTeamProfile(employees){
 
